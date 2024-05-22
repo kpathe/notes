@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session,flash
 import sqlite3
 import hashlib
 import os
@@ -46,10 +46,17 @@ def signup():
         email = request.form['email']
         password = request.form['password']
 
-        hashed_password = hash_password(password)
-
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+        user = cursor.fetchone()
+
+        if user:
+            conn.close()
+            flash('Email already signed up. Please log in.')
+            return redirect('/login')
+
+        hashed_password = hash_password(password)
         cursor.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, email, hashed_password))
         conn.commit()
         conn.close()
