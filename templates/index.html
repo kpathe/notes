@@ -129,7 +129,7 @@
             <div class="addednotes">
                 <ul>
                     <!-- Placeholder for notes added by the user -->
-                    {% for note in notes|reversed %}
+                    {% for note in notes|reverse %}
                     <div class="box">
                         <li style="font-weight: bold;">{{note[0]}}: {{note[1]}}</li>
                         <li>{{note[2]}}</li>
